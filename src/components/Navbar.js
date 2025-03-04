@@ -10,6 +10,7 @@ const Navbar = () => {
       <Link to="/mars-rover">Mars Rover</Link>
       <Link to="/epic">EPIC</Link>
       <Link to="/neo">NEO</Link>
+      <Link to="/gallery">Gallery</Link>
       <Link to="/search">Search</Link>
       <button 
           className={`ml-4 w-12 h-6 flex items-center bg-gray-700 rounded-full p-1 transition-all duration-300 ${

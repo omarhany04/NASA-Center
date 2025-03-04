@@ -4,6 +4,7 @@ import ApodPage from "../pages/ApodPage";
 import MarsRoverPage from "../pages/MarsRoverPage";
 import EpicPage from "../pages/EpicPage";
 import NeoPage from "../pages/NeoPage";
+import GalleryPage from "../pages/GalleryPage";
 
 const AppRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const AppRoutes = () => {
         <Route path="/mars-rover" element={<MarsRoverPage />} />
         <Route path="/epic" element={<EpicPage />} />
         <Route path="/neo" element={<NeoPage />} />
+        <Route path="/gallery" element={<GalleryPage />} />
       </Routes>
   );
 };

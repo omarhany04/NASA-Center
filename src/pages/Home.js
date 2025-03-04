@@ -38,6 +38,13 @@ const Home = () => {
         </Link>
 
         <Link
+          to="/apod"
+          className="bg-blue-600 text-white p-4 rounded-lg shadow-md hover:bg-blue-700"
+        >
+          📸 NASA Gallery 
+        </Link>
+
+        <Link
           to="/search"
           className="bg-gray-700 text-white p-4 rounded-lg shadow-md hover:bg-gray-800"
         >
