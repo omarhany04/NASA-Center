@@ -18,7 +18,7 @@ const Navbar = () => {
           }`}
           onClick={toggleTheme}>
           <div className="w-5 h-5 bg-white rounded-full flex justify-center items-center">
-            {theme === "dark" ? "🌞" : "🌙"}
+            {theme === "dark" ? "🌙" : "🌞"}
           </div>
         </button>
     </nav>
