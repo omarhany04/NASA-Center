@@ -6,7 +6,7 @@ const Gallery = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const imagesPerPage = 10;
+  const imagesPerPage = 12;
 
   useEffect(() => {
     axios
