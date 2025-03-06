@@ -57,7 +57,47 @@ const AboutPage = () => {
           <p className="mt-2">Launched in 2021, the James Webb Space Telescope is NASA’s most advanced telescope, 
           designed to observe distant galaxies and uncover the secrets of the universe.</p>
         </div>
+        <div>
+        <h3 className="text-xl font-bold">Voyager Program (1977)</h3>
+        <div className="flex justify-center gap-4 mt-2">
+          <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Titan_3E_Centaur_launches_Voyager_2.jpg" 
+            alt="Voyager 2 Launch" 
+            className="w-1/3 rounded-md" 
+           />
+         <img 
+            src="https://nssdc.gsfc.nasa.gov/image/spacecraft/voyager.jpg" 
+            alt="Voyager Spacecraft Model" 
+            className="w-1/3 rounded-md" 
+            />
+        </div>
+        <p className="mt-2">
+         Voyager 1 and Voyager 2 were launched in 1977 to explore the outer planets. 
+         Voyager 1 became the first human-made object to enter interstellar space.
+        </p>
+        </div>
+        <div>
+          <h3 className="text-xl font-bold">Hubble Space Telescope (1990)</h3>
+          <div className="flex justify-center">
+            <img src="https://science.nasa.gov/wp-content/uploads/2023/04/27946391011_d40ff10573_h-jpg.webp" 
+              alt="Hubble Space Telescope" 
+              className="w-2/3 rounded-md mt-2" />
+          </div>
+          <p className="mt-2">Launched in 1990, the Hubble Space Telescope has provided breathtaking images 
+          of the universe, helping scientists understand the cosmos.</p>
+        </div>
+        <div>
+          <h3 className="text-xl font-bold">Artemis Program (Ongoing)</h3>
+          <div className="flex justify-center">
+            <img src="https://www.nasa.gov/wp-content/uploads/2022/11/nhq202211160203.jpg" 
+              alt="Artemis Rocket Launch" 
+              className="w-2/3 rounded-md mt-2" />
+          </div>
+          <p className="mt-2">The Artemis program aims to return humans to the Moon and establish a sustainable 
+          presence, serving as a stepping stone for future Mars missions.</p>
+        </div>
       </div>
+      
       
       <h2 className="text-2xl font-semibold mt-5">Current and Future Missions</h2>
       <p className="mt-3 text-lg">
