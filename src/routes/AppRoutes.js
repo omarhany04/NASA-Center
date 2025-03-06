@@ -6,6 +6,7 @@ import EpicPage from "../pages/EpicPage";
 import NeoPage from "../pages/NeoPage";
 import GalleryPage from "../pages/GalleryPage";
 import SearchResults from "../pages/SearchResults";
+import AboutPage from "../pages/AboutPage";
 
 
 const AppRoutes = () => {
@@ -18,6 +19,7 @@ const AppRoutes = () => {
         <Route path="/neo" element={<NeoPage />} />
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
   );
 };

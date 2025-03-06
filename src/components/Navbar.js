@@ -23,6 +23,8 @@ const Navbar = () => {
         <Link to="/epic">EPIC</Link>
         <Link to="/neo">NEO</Link>
         <Link to="/gallery">Gallery</Link>
+        <Link to="/about">About NASA</Link>
+
       </div>
       <form onSubmit={handleSearch} className="flex items-center">
         <input
