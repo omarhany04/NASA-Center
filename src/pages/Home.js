@@ -3,13 +3,14 @@ import SolarSystem from "../components/SolarSystem";
 
 const Home = () => {
   return (
-    
     <div className="p-5 text-center">
       <h1 className="text-3xl font-bold mb-6">🚀 Welcome to NASA Center</h1>
       <p className="text-lg mb-4">
-        Explore fascninating space data from NASA’s APIs.
+        Explore fascinating space data from NASA’s APIs.
       </p>
+
       <SolarSystem />
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         <Link
           to="/apod"
@@ -45,16 +46,8 @@ const Home = () => {
         >
           📸 NASA Gallery 
         </Link>
-
-        <Link
-          to="/search"
-          className="bg-gray-700 text-white p-4 rounded-lg shadow-md hover:bg-gray-800"
-        >
-          🔍 Search NASA Data
-        </Link>
       </div>
     </div>
-    
   );
 };
 

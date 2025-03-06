@@ -32,7 +32,7 @@ const Navbar = () => {
           placeholder="Search NASA Data..."
           className="px-3 py-1 rounded-md text-black"
         />
-        <button type="submit" className="ml-2 px-3 py-1 bg-blue-500 rounded-md">Search</button>
+        <button type="submit" className="ml-2 px-3 py-1 bg-blue-500 rounded-md">Search🔍</button>
       </form>
       <button 
         className={`ml-4 w-12 h-6 flex items-center bg-gray-700 rounded-full p-1 transition-all duration-300 ${

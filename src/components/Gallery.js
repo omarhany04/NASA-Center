@@ -34,13 +34,13 @@ const Gallery = () => {
           type="date" 
           value={startDate} 
           onChange={(e) => setStartDate(e.target.value)}
-          className="border p-2 rounded-md"
+          className="border p-2 rounded-md text-gray-500" 
         />
         <input 
           type="date" 
           value={endDate} 
           onChange={(e) => setEndDate(e.target.value)}
-          className="border p-2 rounded-md"
+          className="border p-2 rounded-md text-gray-500"
         />
       </div>
 
@@ -70,7 +70,7 @@ const Gallery = () => {
             {[...Array(totalPages)].map((_, index) => (
               <button
                 key={index}
-                className={`px-3 py-1 rounded-md ${currentPage === index + 1 ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+                className={`px-3 py-1 rounded-md ${currentPage === index + 1 ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-500"}`}
                 onClick={() => setCurrentPage(index + 1)}
               >
                 {index + 1}
@@ -78,7 +78,7 @@ const Gallery = () => {
             ))}
 
             <button 
-              className={`px-3 py-1 rounded-md ${currentPage === totalPages ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700"}`}
+              className={`px-3 py-1 rounded-md  ${currentPage === totalPages ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover :bg-blue-700 "}`}
               onClick={() => setCurrentPage(currentPage + 1)}
               disabled={currentPage === totalPages}
             >
