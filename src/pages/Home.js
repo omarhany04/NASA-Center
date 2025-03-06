@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import EarthMarsModel from "../components/EarthMarsModel";
 
 const Home = () => {
   return (
@@ -7,6 +8,8 @@ const Home = () => {
       <p className="text-lg mb-4">
         Explore fascinating space data from NASA’s APIs.
       </p>
+
+      <EarthMarsModel />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         <Link
