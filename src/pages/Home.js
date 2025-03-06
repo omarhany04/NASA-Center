@@ -14,7 +14,8 @@ const Home = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         <Link
           to="/apod"
-          className="bg-blue-600 text-white p-4 rounded-lg shadow-md hover:bg-blue-700"
+          className="bg-violet-700 text-white p-4 rounded-lg shadow-md hover:bg-violet-800"
+
         >
           🌌 Astronomy Picture of the Day (APOD)
         </Link>
@@ -28,7 +29,7 @@ const Home = () => {
 
         <Link
           to="/epic"
-          className="bg-green-600 text-white p-4 rounded-lg shadow-md hover:bg-green-700"
+          className="bg-teal-600 text-white p-4 rounded-lg shadow-md hover:bg-teal-700"
         >
           🌍 Earth (EPIC)
         </Link>
@@ -42,9 +43,17 @@ const Home = () => {
 
         <Link
           to="/gallery"
-          className="bg-purple-600 text-white p-4 rounded-lg shadow-md hover:bg-purple-700"
+          className="bg-orange-600 text-white p-4 rounded-lg shadow-md hover:bg-orange-700"
+
         >
           📸 NASA Gallery 
+        </Link>
+
+        <Link
+          to="/live-earth"
+          className="bg-indigo-800 text-white p-4 rounded-lg shadow-md hover:bg-indigo-900"
+        >
+          📡 Live Earth Stream
         </Link>
       </div>
     </div>

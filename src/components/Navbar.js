@@ -23,6 +23,7 @@ const Navbar = () => {
         <Link to="/epic">EPIC</Link>
         <Link to="/neo">NEO</Link>
         <Link to="/gallery">Gallery</Link>
+        <Link to="/live-earth">Live Earth</Link>
         <Link to="/about">About NASA</Link>
 
       </div>

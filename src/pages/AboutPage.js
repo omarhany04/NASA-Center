@@ -66,7 +66,7 @@ const AboutPage = () => {
             className="w-1/3 rounded-md" 
            />
          <img 
-            src="https://nssdc.gsfc.nasa.gov/image/spacecraft/voyager.jpg" 
+            src="https://www.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/ONYKMZEXPLQFIJZA45ANZRZ7E4_size-normalized.jpg&w=1200" 
             alt="Voyager Spacecraft Model" 
             className="w-1/3 rounded-md" 
             />

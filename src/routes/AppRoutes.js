@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Home from "../pages/Home";
 import ApodPage from "../pages/ApodPage";
 import MarsRoverPage from "../pages/MarsRoverPage";
@@ -7,6 +7,7 @@ import NeoPage from "../pages/NeoPage";
 import GalleryPage from "../pages/GalleryPage";
 import SearchResults from "../pages/SearchResults";
 import AboutPage from "../pages/AboutPage";
+import LiveEarthStream from "../components/LiveEarthStream";
 
 
 const AppRoutes = () => {
@@ -20,6 +21,7 @@ const AppRoutes = () => {
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/live-earth" element={<LiveEarthStream />} />
       </Routes>
   );
 };
