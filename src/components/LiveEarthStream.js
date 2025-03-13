@@ -10,7 +10,7 @@ const LiveEarthStream = () => {
   return (
     <div className="flex justify-center items-center h-screen">
       {videoUrl ? (
-        <iframe width="1000" height="750" src={videoUrl} frameBorder="0" allowFullScreen></iframe>
+        <iframe width="1000" height="550" src={videoUrl} frameBorder="0" allowFullScreen></iframe>
       ) : (
         <p>Loading live feed...</p>
       )}
