@@ -16,12 +16,12 @@ const Chatbot = () => {
   const [isTyping, setIsTyping] = useState(false);
   
   const startTypingEffect = (fullText) => {
-    setDisplayedMessage("");
     setIsTyping(true);
+    setDisplayedMessage("");
   
     let index = 0;
     const displayRef = { current: "" };
-    
+  
     const interval = setInterval(() => {
       if (index < fullText.length) {
         displayRef.current += fullText[index];
@@ -30,19 +30,25 @@ const Chatbot = () => {
       } else {
         clearInterval(interval);
         setIsTyping(false);
-        setMessages(prevMessages => [...prevMessages, { role: "assistant", content: fullText }]);
+        setMessages(prevMessages => {
+          return prevMessages.map((msg, i) => 
+            i === prevMessages.length - 1 ? { ...msg, content: fullText } : msg
+          );
+        });
       }
-    }, 15);  // time(ms) per character
+    }, 15);
   };
+  
 
   useEffect(() => {
     if (isOpen) {
-      setMessages([{ role: "assistant", content: "..." }]); 
+      setMessages([{ role: "assistant", content: "..." }]);
       setTimeout(() => {
-        setMessages([{ role: "assistant", content: "Hello! I am NASA Virtual Assistant. Ask me anything about space! 🚀" }]);
-      }, 800); 
+        startTypingEffect("Hello! I am NASA Virtual Assistant. Ask me anything about space! 🚀");
+      }, 800);
     }
-  }, [isOpen]); 
+  }, [isOpen]);
+  
   
   useEffect(() => {
     if (Object.keys(manualResponses).length === 0) {
