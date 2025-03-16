@@ -2,6 +2,7 @@ import { useState, useEffect  } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { MessageSquare, X, Send } from "lucide-react";
+import Quiz from "./Quiz";
 
 const Chatbot = () => {
   const [query, setQuery] = useState("");
@@ -9,10 +10,6 @@ const Chatbot = () => {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
-  const [quizStep, setQuizStep] = useState(0);
-  const [quizScore, setQuizScore] = useState(0);
-  const [answerStatus, setAnswerStatus] = useState(null);
-  const [showAnswer, setShowAnswer] = useState(false);
   const [nasaMode, setNasaMode] = useState(false);
   const [manualResponses, setManualResponses] = useState({});
   const [displayedMessage, setDisplayedMessage] = useState("");
@@ -23,16 +20,19 @@ const Chatbot = () => {
     setIsTyping(true);
   
     let index = 0;
+    const displayRef = { current: "" };
+    
     const interval = setInterval(() => {
       if (index < fullText.length) {
-        setDisplayedMessage((prev) => prev + fullText[index]);
+        displayRef.current += fullText[index];
+        setDisplayedMessage(displayRef.current);
         index++;
       } else {
         clearInterval(interval);
         setIsTyping(false);
-        setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: fullText }]);
+        setMessages(prevMessages => [...prevMessages, { role: "assistant", content: fullText }]);
       }
-    }, 15); // time(ms) per character
+    }, 15);  // time(ms) per character
   };
 
   useEffect(() => {
@@ -45,49 +45,14 @@ const Chatbot = () => {
   }, [isOpen]); 
   
   useEffect(() => {
-    axios.get(process.env.PUBLIC_URL + "/data/responses.json")
-      .then(response => setManualResponses(response.data))
-      .catch(error => console.error("Error loading responses:", error));
-  }, []);
-  
+    if (Object.keys(manualResponses).length === 0) {
+      axios.get(process.env.PUBLIC_URL + "/data/responses.json")
+        .then(response => setManualResponses(response.data))
+        .catch(error => console.error("Error loading responses:", error));
+    }
+  }, [manualResponses]);
   
   const NASA_API_KEY = process.env.REACT_APP_NASA_API_KEY;
-
-  const quizQuestions = [
-    { question: "1. What is the largest planet in our solar system?", options: ["Earth", "Jupiter", "Mars", "Saturn"], answer: "Jupiter" },
-    { question: "2. Which planet is known as the Red Planet?", options: ["Venus", "Mars", "Mercury", "Neptune"], answer: "Mars" },
-    { question: "3. How many moons does Earth have?", options: ["1", "2", "5", "None"], answer: "1" },
-    { question: "4. Which planet has the most moons?", options: ["Jupiter", "Saturn", "Uranus", "Neptune"], answer: "Saturn" },
-    { question: "5. What is the name of NASA’s most famous space telescope?", options: ["Kepler", "Chandra", "Hubble", "James Webb"], answer: "Hubble" }
-  ];
-
-  const handleQuizAnswer = (selectedOption) => {
-    setShowAnswer(true);
-
-    if (selectedOption === quizQuestions[quizStep].answer) {
-      setQuizScore(prevScore => prevScore + 1);
-      setAnswerStatus("correct");
-    } else {
-      setAnswerStatus("wrong");
-    }    
-
-    setTimeout(() => {
-      setShowAnswer(false);
-      setAnswerStatus(null);
-
-      if (quizStep + 1 < quizQuestions.length) {
-        setQuizStep(prevStep => prevStep + 1);
-      } else {
-        const finalScore = selectedOption === quizQuestions[quizStep].answer ? quizScore + 1 : quizScore;
-        alert(`Quiz finished! 🎉 Your score: ${finalScore}/${quizQuestions.length}`);
-
-        setQuizOpen(false);
-        setQuizStep(0);
-        setQuizScore(0);
-      }
-    }, 1250);
-  };
-
 
   const fetchNASAData = async (query) => {
     let url = "";
@@ -124,15 +89,15 @@ const Chatbot = () => {
     setMessages([...newMessages, { role: "assistant", content: <p className="text-gray-400">Thinking...</p> }]);
     setQuery("");
   
-  // Check if query exists in manual responses
-  const lowerQuery = query.toLowerCase();
-  if (manualResponses[lowerQuery]) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    startTypingEffect(manualResponses[lowerQuery]);
-    setMessages([...newMessages, { role: "assistant", content: "Final Response" }]);
-    setLoading(false);
-    return;
-  }
+    // Check if query exists in manual responses
+    const lowerQuery = query.toLowerCase();
+     if (manualResponses[lowerQuery]) {
+       await new Promise(resolve => setTimeout(resolve, 1000));
+       startTypingEffect(manualResponses[lowerQuery]);
+       setMessages([...newMessages, { role: "assistant", content: "Final Response" }]);
+       setLoading(false);
+       return;
+    }
 
     const response = await fetchNASAData(query);
     await new Promise(resolve => setTimeout(resolve, 1000)); 
@@ -281,37 +246,8 @@ const Chatbot = () => {
       </motion.div>
     )}
 
-    {quizOpen && (
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: 20 }}
-        className="bg-gray-800 text-white p-4 rounded-lg shadow-lg w-80 fixed bottom-5 right-96"
-      >
-        <div className="flex justify-between items-center mb-3">
-          <h3 className="text-lg font-bold">🧑‍🚀 Space Quiz</h3>
-          <button onClick={() => setQuizOpen(false)} className="text-gray-400 hover:text-white">
-            <X size={20} />
-          </button>
-        </div>
-
-        <p className="text-lg font-bold mb-2">{quizQuestions[quizStep].question}</p>
-        {quizQuestions[quizStep].options.map((opt, i) => (
-          <motion.button
-            key={i}
-            onClick={() => handleQuizAnswer(opt)}
-            className={`p-2 rounded-md block w-full mt-1 ${
-              showAnswer && opt === quizQuestions[quizStep].answer ? "bg-green-500" : 
-              showAnswer && answerStatus === "wrong" && opt !== quizQuestions[quizStep].answer ? "bg-red-500" : "bg-gray-700"
-            }`}
-            whileTap={{ scale: 0.9 }}
-          >
-            {opt}
-          </motion.button>
-        ))}
-      </motion.div>
-    )}
-  </div>
+    {quizOpen && <Quiz setQuizOpen={setQuizOpen} />}
+    </div>
 );
 };
 
