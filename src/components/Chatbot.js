@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect  } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { MessageSquare, X, Send } from "lucide-react";
@@ -14,15 +14,51 @@ const Chatbot = () => {
   const [answerStatus, setAnswerStatus] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [nasaMode, setNasaMode] = useState(false);
+  const [manualResponses, setManualResponses] = useState({});
+  const [displayedMessage, setDisplayedMessage] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  
+  const startTypingEffect = (fullText) => {
+    setDisplayedMessage("");
+    setIsTyping(true);
+  
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index < fullText.length) {
+        setDisplayedMessage((prev) => prev + fullText[index]);
+        index++;
+      } else {
+        clearInterval(interval);
+        setIsTyping(false);
+        setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: fullText }]);
+      }
+    }, 15); // time(ms) per character
+  };
 
+  useEffect(() => {
+    if (isOpen) {
+      setMessages([{ role: "assistant", content: "..." }]); 
+      setTimeout(() => {
+        setMessages([{ role: "assistant", content: "Hello! I am NASA Virtual Assistant. Ask me anything about space! 🚀" }]);
+      }, 800); 
+    }
+  }, [isOpen]); 
+  
+  useEffect(() => {
+    axios.get(process.env.PUBLIC_URL + "/data/responses.json")
+      .then(response => setManualResponses(response.data))
+      .catch(error => console.error("Error loading responses:", error));
+  }, []);
+  
+  
   const NASA_API_KEY = process.env.REACT_APP_NASA_API_KEY;
 
   const quizQuestions = [
-    { question: "What is the largest planet in our solar system?", options: ["Earth", "Jupiter", "Mars", "Saturn"], answer: "Jupiter" },
-    { question: "Which planet is known as the Red Planet?", options: ["Venus", "Mars", "Mercury", "Neptune"], answer: "Mars" },
-    { question: "How many moons does Earth have?", options: ["1", "2", "5", "None"], answer: "1" },
-    { question: "Which planet has the most moons?", options: ["Jupiter", "Saturn", "Uranus", "Neptune"], answer: "Saturn" },
-    { question: "What is the name of NASA’s most famous space telescope?", options: ["Kepler", "Chandra", "Hubble", "James Webb"], answer: "Hubble" }
+    { question: "1. What is the largest planet in our solar system?", options: ["Earth", "Jupiter", "Mars", "Saturn"], answer: "Jupiter" },
+    { question: "2. Which planet is known as the Red Planet?", options: ["Venus", "Mars", "Mercury", "Neptune"], answer: "Mars" },
+    { question: "3. How many moons does Earth have?", options: ["1", "2", "5", "None"], answer: "1" },
+    { question: "4. Which planet has the most moons?", options: ["Jupiter", "Saturn", "Uranus", "Neptune"], answer: "Saturn" },
+    { question: "5. What is the name of NASA’s most famous space telescope?", options: ["Kepler", "Chandra", "Hubble", "James Webb"], answer: "Hubble" }
   ];
 
   const handleQuizAnswer = (selectedOption) => {
@@ -85,36 +121,50 @@ const Chatbot = () => {
     setLoading(true);
   
     const newMessages = [...messages, { role: "user", content: query }];
-    setMessages(newMessages);
+    setMessages([...newMessages, { role: "assistant", content: <p className="text-gray-400">Thinking...</p> }]);
     setQuery("");
   
+  // Check if query exists in manual responses
+  const lowerQuery = query.toLowerCase();
+  if (manualResponses[lowerQuery]) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    startTypingEffect(manualResponses[lowerQuery]);
+    setMessages([...newMessages, { role: "assistant", content: "Final Response" }]);
+    setLoading(false);
+    return;
+  }
+
     const response = await fetchNASAData(query);
-    let formattedResponse = "Sorry, I couldn't find relevant data.";
+    await new Promise(resolve => setTimeout(resolve, 1000)); 
+
+    let formattedResponse = "Hmm... I couldn't find relevant data this time. Try asking something else about space!🌌 ";
   
     if (response) {
       if (Array.isArray(response.photos) && response.photos.length > 0) {
         // Mars Rover photos
+        formattedResponse = "🔭 Behold! Fresh images captured by the Mars Rover. Check them out below:";
         formattedResponse = response.photos.slice(0, 5).map(photo => ({
           type: "image",
           img: photo.img_src,
-          camera: photo.camera.full_name,
-          date: photo.earth_date,
-          rover: photo.rover.name,
+          camera: `📷 Captured by: ${photo.camera.full_name}`,
+          date: `📅 Date: ${photo.earth_date}`,
+          rover: `🚀 Rover: ${photo.rover.name}`,
         }));
       } else if (response.url) {
         // APOD response
         formattedResponse = {
           type: "image",
           img: response.url,
-          title: response.title,
-          description: response.explanation,
+          title: `🌟 NASA's Astronomy Picture of the Day: ${response.title}`,
+          description: `📖 ${response.explanation}`,
         };
       } else if (Array.isArray(response) && response.length > 0) {
         // EPIC images
+        formattedResponse = `🌍 Our beautiful Earth as seen from space! Here are the latest images captured by NASA’s EPIC camera:`;
         formattedResponse = response.slice(0, 5).map(item => ({
           type: "image",
           img: `https://epic.gsfc.nasa.gov/archive/natural/${item.date.split(" ")[0].replaceAll("-", "/")}/png/${item.image}.png`,
-          date: item.date,
+          date: `📅 Captured on: ${item.date}`,
         }));
       } else if (response.near_earth_objects) {
         // Asteroid Data
@@ -123,9 +173,9 @@ const Chatbot = () => {
           .slice(0, 5)
           .map(asteroid => ({
             type: "text",
-            name: asteroid.name,
-            size: `${asteroid.estimated_diameter.kilometers.estimated_diameter_min.toFixed(2)} - ${asteroid.estimated_diameter.kilometers.estimated_diameter_max.toFixed(2)} km`,
-            close_approach_date: asteroid.close_approach_data[0]?.close_approach_date_full || "N/A",
+        name: `🪨 Name: ${asteroid.name}`,
+        size: `📏 Estimated Size: ${asteroid.estimated_diameter.kilometers.estimated_diameter_min.toFixed(2)} - ${asteroid.estimated_diameter.kilometers.estimated_diameter_max.toFixed(2)} km`,
+        close_approach_date: `📅 Close Approach: ${asteroid.close_approach_data[0]?.close_approach_date_full || "N/A"}`,
           }));
       }
     }
@@ -156,7 +206,7 @@ const Chatbot = () => {
         className="bg-gray-800 text-white p-4 rounded-lg shadow-lg w-80 fixed bottom-5 right-5"
       >
         <div className="flex justify-between items-center mb-3">
-          <h3 className="text-lg font-bold">🚀 NASA Virtual Assistant</h3>
+          <h3 className="text-lg font-bold">✨ NASA Virtual Assistant</h3>
           <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white">
             <X size={20} />
           </button>
@@ -166,7 +216,7 @@ const Chatbot = () => {
         {messages.map((msg, index) => (
         <div key={index} className={`p-2 rounded-md ${msg.role === "user" ? "bg-blue-500 text-white" : "bg-gray-700 text-white"}`}>
         {typeof msg.content === "string" ? (
-        msg.content
+        msg.role === "assistant" && isTyping && index === messages.length - 1 ? displayedMessage : msg.content
         ) : Array.isArray(msg.content) ? (
         msg.content.map((item, i) => (
           <div key={i} className="p-2 bg-gray-800 rounded-md mt-2">
@@ -202,8 +252,8 @@ const Chatbot = () => {
 
         {!nasaMode && (
         <div className="flex flex-col space-y-2 mt-3">
-        <button onClick={() => setQuizOpen(true)} className="bg-green-500 text-white p-2 rounded-md">🌟 Start Space Quiz</button>
-        <button onClick={() => setNasaMode(true)} className="bg-blue-500 text-white p-2 rounded-md">🚀 NASA Data</button>
+        <button onClick={() => setQuizOpen(true)} className="bg-green-500 text-white p-2 rounded-md">📝 Start Space Quiz</button>
+        <button onClick={() => setNasaMode(true)} className="bg-blue-500 text-white p-2 rounded-md">💫 Ask About Space</button>
        </div>
         )}
 
@@ -213,7 +263,7 @@ const Chatbot = () => {
             <input
               type="text"
               className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600"
-              placeholder="Ask me about NASA..."
+              placeholder="Ask me about space..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleAsk()}
@@ -266,4 +316,3 @@ const Chatbot = () => {
 };
 
 export default Chatbot;
-
