@@ -1,0 +1,18 @@
+.ticker-container {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 10px 0;
+    position: relative;
+}
+
+.ticker-text {
+    display: inline-block;
+    font-size: 19px;
+    animation: scrollText 12s linear infinite;
+}
+
+@keyframes scrollText {
+    from { transform: translateX(100%); }
+    to { transform: translateX(-100%); }
+}

@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import SolarSystem from "../components/SolarSystem";
+import Ticker from "../components/Ticker";
 
 const Home = () => {
   return (
     <div className="p-5 text-center">
       <h1 className="text-3xl font-bold mb-6">🚀 Welcome to NASA Center</h1>
-      <p className="text-lg mb-4">
-        Explore fascinating space data from NASA’s APIs.
-      </p>
+      
+      <Ticker />
 
       <SolarSystem />
 
