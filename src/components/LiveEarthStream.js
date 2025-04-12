@@ -8,9 +8,16 @@ const LiveEarthStream = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen p-4">
       {videoUrl ? (
-        <iframe width="1000" height="550" src={videoUrl} frameBorder="0" allowFullScreen></iframe>
+        <div className="w-full max-w-[1000px] aspect-video">
+          <iframe
+            className="w-full h-full"
+            src={videoUrl}
+            frameBorder="0"
+            allowFullScreen
+          ></iframe>
+        </div>
       ) : (
         <p>Loading live feed...</p>
       )}
