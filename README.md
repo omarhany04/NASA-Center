@@ -1,74 +1,32 @@
-<<<<<<< HEAD
-# NASA-Center
-=======
-# Getting Started with Create React App
+<h3>✨ Overview</h3>
+<p>NASA Center is a <strong>frontend React-based web application</strong> that integrates multiple NASA APIs to provide real-time space data. It offers users a visually immersive and interactive experience with space exploration, including <strong>3D visualizations, live streams, AI-powered assistance, and educational quizzes</strong>.</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h3>🚀 Key Features</h3>
+<ul>
+    <li><strong>Real-Time Space Data:</strong> Fetches the latest space data from NASA APIs.</li>
+    <li><strong>Image Gallery & Filtering:</strong> View and filter NASA’s space images (APOD, Mars Rover, etc.).</li>
+    <li><strong>Live Earth Stream:</strong> Watch Earth from space in real-time.</li>
+    <li><strong>3D Solar System Visualization:</strong> Interactive 3D representation of the solar system.</li>
+    <li><strong>AI-powered Virtual Assistant:</strong> Chatbot for space-related queries.</li>
+    <li><strong>Search & Filtering:</strong> Advanced search options for images, missions, and celestial bodies.</li>
+    <li><strong>Interactive Space Quiz:</strong> Educational quizzes to test and expand space knowledge.</li>
+    <li><strong>Dark Mode Support:</strong> Enhanced accessibility and user experience.</li>
+    <li><strong>News & Live Events:</strong> Stay updated with the latest space missions and discoveries.</li>
+</ul>
 
-## Available Scripts
+<h3>🔧 Tools & Frameworks</h3>
+<h4>Frontend Technologies</h4>
+<ul>
+    <li>React.js (UI Framework)</li>
+    <li>Axios (API Requests)</li>
+    <li>Tailwind CSS (Styling)</li>
+</ul>
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
->>>>>>> 219dce9 (Initialize project using Create React App)
+<h4>NASA APIs Used</h4>
+<ul>
+    <li>APOD (Astronomy Picture of the Day)</li>
+    <li>Mars Rover Photos</li>
+    <li>EPIC (Earth Polychromatic Imaging Camera)</li>
+    <li>NEO (Near-Earth Object)</li>
+    <li>NASA Live Events & News Feeds</li>
+</ul>
