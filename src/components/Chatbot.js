@@ -3,9 +3,9 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { MessageSquare, X, Send, StopCircle } from "lucide-react";
 import Quiz from "./Quiz";
+import { Bot } from "lucide-react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Environment variables reference - NEVER put actual keys here
 const NASA_API_KEY = process.env.REACT_APP_NASA_API_KEY;
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 
@@ -30,8 +30,6 @@ const Chatbot = () => {
         apiVersion: "v1",   
       },
     });
-  
-    // Optional: Store the model or chat session if needed later
     return model;
   };
   
@@ -70,15 +68,11 @@ const Chatbot = () => {
       
       // Update the displayed message with the full message
       setDisplayedMessage(fullMessageRef.current);
-      
-      // Update the messages array with the full message
       setMessages(prevMessages => {
         return prevMessages.map((msg, i) => 
           i === prevMessages.length - 1 ? { ...msg, content: fullMessageRef.current } : msg
         );
       });
-      
-      // Reset typing state
       setIsTyping(false);
     }
   };
@@ -87,14 +81,11 @@ const Chatbot = () => {
   const startTypingEffect = (fullText) => {
     setIsTyping(true);
     setDisplayedMessage("");
-    
-    // Store the full message for reference
+
     fullMessageRef.current = fullText;
-  
     let index = 0;
     const displayRef = { current: "" };
-  
-    // Clear any existing interval
+
     if (typingIntervalRef.current) {
       clearInterval(typingIntervalRef.current);
     }
@@ -122,7 +113,7 @@ const Chatbot = () => {
     if (isOpen) {
       setMessages([{ role: "assistant", content: "..." }]);
       setTimeout(() => {
-        startTypingEffect("Hello! I'm your AI assistant powered by Gemini. Ask me anything! 🚀");
+        startTypingEffect("Hello! I'm your NASA AI Assistant powered by Gemini. Ask me anything about space! 🚀");
       }, 800);
     }
     
@@ -155,7 +146,7 @@ const Chatbot = () => {
       return response.data;
     } catch (error) {
       console.error("NASA API Error:", error);
-      return null; // Use Gemini as fallback
+      return null; 
     }
   };
 
@@ -246,8 +237,20 @@ const Chatbot = () => {
     setLoading(false);
   };
 
+  // Determine chat window dimensions based on screen size
+  const getChatWindowDimensions = () => {
+    if (typeof window !== "undefined") {
+      const width = window.innerWidth;
+      if (width < 480) return "w-11/12 mx-auto h-64"; // extra small screens
+      if (width < 640) return "w-80 mx-auto h-72"; // small screens
+      if (width < 768) return "w-80 h-80"; // medium screens
+      return "w-96 h-96"; // large screens
+    }
+    return "w-80 h-80"; // default
+  };
+
   return (
-    <div className="fixed bottom-5 right-5">
+    <div className="fixed bottom-5 right-5 z-10">
       {!isOpen && (
         <motion.button
           onClick={() => setIsOpen(true)}
@@ -263,16 +266,18 @@ const Chatbot = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          className="bg-gray-800 text-white p-4 rounded-lg shadow-lg w-80 fixed bottom-5 right-5"
+          className={`bg-gray-800 text-white p-3 rounded-lg shadow-lg ${getChatWindowDimensions()} fixed bottom-4 right-4 max-w-full sm:max-w-md`}
         >
           <div className="flex justify-between items-center mb-3">
-            <h3 className="text-lg font-bold">✨ AI Assistant</h3>
+            <h3 className="text-lg font-bold flex items-center">
+              <Bot className="w-5 h-5 mr-2 text-purple-400" />NASA Bot
+            </h3>
             <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white">
               <X size={20} />
             </button>
           </div>
 
-          <div className="h-48 overflow-y-auto border border-gray-700 rounded p-2 space-y-2">
+          <div className="h-36 sm:h-40 md:h-48 overflow-y-auto border border-gray-700 rounded p-2 space-y-2">
             {messages.map((msg, index) => (
               <div key={index} className={`p-2 rounded-md ${msg.role === "user" ? "bg-blue-500 text-white" : "bg-gray-700 text-white"}`}>
                 {typeof msg.content === "string" ? (
@@ -309,8 +314,6 @@ const Chatbot = () => {
             ))}
             {loading && <p className="text-gray-400">Thinking...</p>}
           </div>
-
-          {/* Stop button removed from here */}
 
           {!nasaMode && (
             <div className="flex flex-col space-y-2 mt-3">
@@ -353,7 +356,7 @@ const Chatbot = () => {
         </motion.div>
       )}
 
-      {quizOpen && <Quiz setQuizOpen={setQuizOpen} />}
+      {quizOpen && <Quiz setQuizOpen={setQuizOpen} isOpen={isOpen} />}
     </div>
   );
 };
