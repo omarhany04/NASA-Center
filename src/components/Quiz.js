@@ -34,7 +34,7 @@ const Quiz = ({ setQuizOpen, isOpen }) => {
           if (isOpen) {
             setQuizPosition({
               position: "fixed",
-              bottom: "18rem", // Position above chatbot
+              bottom: "26rem", // Increased to account for taller chatbot
               right: "4px",
               left: "4px",
               maxHeight: "14rem"
@@ -53,7 +53,7 @@ const Quiz = ({ setQuizOpen, isOpen }) => {
           if (isOpen) {
             setQuizPosition({
               position: "fixed",
-              bottom: "20rem", // Position above chatbot
+              bottom: "28rem", // Increased to account for taller chatbot
               right: "auto",
               left: "50%",
               transform: "translateX(-50%)",
@@ -71,14 +71,23 @@ const Quiz = ({ setQuizOpen, isOpen }) => {
           }
         } else if (width < 768) {
           // For medium screens
-          setQuizPosition({
-            position: "fixed",
-            bottom: "4rem",
-            right: isOpen ? "calc(18rem + 32px)" : "4rem", // 32px gap (2rem) between components
-            maxHeight: "20rem"
-          });
+          if (isOpen) {
+            setQuizPosition({
+              position: "fixed",
+              bottom: "4rem",
+              right: "calc(18rem + 32px)", // 32px gap (2rem) between components
+              maxHeight: "20rem"
+            });
+          } else {
+            setQuizPosition({
+              position: "fixed",
+              bottom: "4rem",
+              right: "4rem",
+              maxHeight: "20rem"
+            });
+          }
         } else {
-          // For larger screens - positioned to the left with a larger gap
+          // For larger screens - keep original desktop positioning
           setQuizPosition({
             position: "fixed",
             bottom: "4rem",
@@ -145,7 +154,8 @@ const Quiz = ({ setQuizOpen, isOpen }) => {
     position: quizPosition.position,
     bottom: quizPosition.bottom,
     right: quizPosition.right,
-    left: quizPosition.left
+    left: quizPosition.left,
+    transform: quizPosition.transform
   };
 
   return (

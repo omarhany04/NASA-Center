@@ -241,12 +241,12 @@ const Chatbot = () => {
   const getChatWindowDimensions = () => {
     if (typeof window !== "undefined") {
       const width = window.innerWidth;
-      if (width < 480) return "w-11/12 mx-auto h-64"; // extra small screens
-      if (width < 640) return "w-80 mx-auto h-72"; // small screens
-      if (width < 768) return "w-80 h-80"; // medium screens
-      return "w-96 h-96"; // large screens
+      if (width < 480) return "w-11/12 mx-auto h-96"; // Increased height for extra small screens
+      if (width < 640) return "w-80 mx-auto h-[400px]"; // Increased height for small screens
+      if (width < 768) return "w-80 h-[420px]"; // Increased height for medium screens
+      return "w-96 h-[460px]"; // Increased height for large screens
     }
-    return "w-80 h-80"; // default
+    return "w-80 h-[400px]"; // Increased default height
   };
 
   return (
@@ -266,7 +266,7 @@ const Chatbot = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          className={`bg-gray-800 text-white p-3 rounded-lg shadow-lg ${getChatWindowDimensions()} fixed bottom-4 right-4 max-w-full sm:max-w-md`}
+          className={`bg-gray-800 text-white p-3 pb-6 rounded-lg shadow-lg ${getChatWindowDimensions()} fixed bottom-4 right-4 max-w-full sm:max-w-md flex flex-col`}
         >
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-lg font-bold flex items-center">
@@ -277,7 +277,7 @@ const Chatbot = () => {
             </button>
           </div>
 
-          <div className="h-36 sm:h-40 md:h-48 overflow-y-auto border border-gray-700 rounded p-2 space-y-2">
+          <div className="flex-grow h-40 sm:h-48 md:h-56 overflow-y-auto border border-gray-700 rounded p-2 space-y-2 mb-3">
             {messages.map((msg, index) => (
               <div key={index} className={`p-2 rounded-md ${msg.role === "user" ? "bg-blue-500 text-white" : "bg-gray-700 text-white"}`}>
                 {typeof msg.content === "string" ? (
@@ -316,14 +316,14 @@ const Chatbot = () => {
           </div>
 
           {!nasaMode && (
-            <div className="flex flex-col space-y-2 mt-3">
+            <div className="flex flex-col space-y-2 mt-auto">
               <button onClick={() => setQuizOpen(true)} className="bg-green-500 text-white p-2 rounded-md">📝 Start Space Quiz</button>
               <button onClick={() => setNasaMode(true)} className="bg-blue-500 text-white p-2 rounded-md">💬 Ask Me Anything</button>
             </div>
           )}
 
           {nasaMode && (
-            <div className="mt-3">
+            <div className="mt-auto">
               <input
                 type="text"
                 className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600"
