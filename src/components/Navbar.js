@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../components/ThemeContext";
 import { useState, useEffect } from "react";
 import { 
@@ -22,6 +22,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Add this to get current path
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,14 +61,14 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-1 items-center mr-auto ml-6">
-          <NavLink to="/" icon={<Home className="w-4 h-4" />} label="Home" />
-          <NavLink to="/apod" icon={<Camera className="w-4 h-4" />} label="APOD" />
-          <NavLink to="/mars-rover" icon={<Rocket className="w-4 h-4" />} label="Mars Rover" />
-          <NavLink to="/epic" icon={<Globe className="w-4 h-4" />} label="EPIC" />
-          <NavLink to="/neo" icon={<Star className="w-4 h-4" />} label="NEO" />
-          <NavLink to="/gallery" icon={<Image className="w-4 h-4" />} label="Gallery" />
-          <NavLink to="/live-earth" icon={<Video className="w-4 h-4" />} label="Live Earth" />
-          <NavLink to="/about" icon={<Info className="w-4 h-4" />} label="About" />
+          <NavLink to="/" icon={<Home className="w-4 h-4" />} label="Home" currentPath={location.pathname} />
+          <NavLink to="/apod" icon={<Camera className="w-4 h-4" />} label="APOD" currentPath={location.pathname} />
+          <NavLink to="/mars-rover" icon={<Rocket className="w-4 h-4" />} label="Mars Rover" currentPath={location.pathname} />
+          <NavLink to="/epic" icon={<Globe className="w-4 h-4" />} label="EPIC" currentPath={location.pathname} />
+          <NavLink to="/neo" icon={<Star className="w-4 h-4" />} label="NEO" currentPath={location.pathname} />
+          <NavLink to="/gallery" icon={<Image className="w-4 h-4" />} label="Gallery" currentPath={location.pathname} />
+          <NavLink to="/live-earth" icon={<Video className="w-4 h-4" />} label="Live Earth" currentPath={location.pathname} />
+          <NavLink to="/about" icon={<Info className="w-4 h-4" />} label="About" currentPath={location.pathname} />
         </div>
         
         <div className="hidden md:flex gap-3 items-center">
@@ -114,14 +115,14 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden flex flex-col px-4 pb-4 gap-2 bg-blue-950/80 border-t border-blue-800/50 animate-fadeIn">
-          <MobileNavLink to="/" icon={<Home className="w-4 h-4" />} label="Home" onClick={() => setIsOpen(false)} />
-          <MobileNavLink to="/apod" icon={<Camera className="w-4 h-4" />} label="APOD" onClick={() => setIsOpen(false)} />
-          <MobileNavLink to="/mars-rover" icon={<Rocket className="w-4 h-4" />} label="Mars Rover" onClick={() => setIsOpen(false)} />
-          <MobileNavLink to="/epic" icon={<Globe className="w-4 h-4" />} label="EPIC" onClick={() => setIsOpen(false)} />
-          <MobileNavLink to="/neo" icon={<Star className="w-4 h-4" />} label="NEO" onClick={() => setIsOpen(false)} />
-          <MobileNavLink to="/gallery" icon={<Image className="w-4 h-4" />} label="Gallery" onClick={() => setIsOpen(false)} />
-          <MobileNavLink to="/live-earth" icon={<Video className="w-4 h-4" />} label="Live Earth" onClick={() => setIsOpen(false)} />
-          <MobileNavLink to="/about" icon={<Info className="w-4 h-4" />} label="About" onClick={() => setIsOpen(false)} />
+          <MobileNavLink to="/" icon={<Home className="w-4 h-4" />} label="Home" onClick={() => setIsOpen(false)} currentPath={location.pathname} />
+          <MobileNavLink to="/apod" icon={<Camera className="w-4 h-4" />} label="APOD" onClick={() => setIsOpen(false)} currentPath={location.pathname} />
+          <MobileNavLink to="/mars-rover" icon={<Rocket className="w-4 h-4" />} label="Mars Rover" onClick={() => setIsOpen(false)} currentPath={location.pathname} />
+          <MobileNavLink to="/epic" icon={<Globe className="w-4 h-4" />} label="EPIC" onClick={() => setIsOpen(false)} currentPath={location.pathname} />
+          <MobileNavLink to="/neo" icon={<Star className="w-4 h-4" />} label="NEO" onClick={() => setIsOpen(false)} currentPath={location.pathname} />
+          <MobileNavLink to="/gallery" icon={<Image className="w-4 h-4" />} label="Gallery" onClick={() => setIsOpen(false)} currentPath={location.pathname} />
+          <MobileNavLink to="/live-earth" icon={<Video className="w-4 h-4" />} label="Live Earth" onClick={() => setIsOpen(false)} currentPath={location.pathname} />
+          <MobileNavLink to="/about" icon={<Info className="w-4 h-4" />} label="About" onClick={() => setIsOpen(false)} currentPath={location.pathname} />
 
           <div className="border-t border-blue-800/50 pt-3 mt-1">
             <form onSubmit={handleSearch} className="flex items-center">
@@ -172,28 +173,46 @@ const Navbar = () => {
 };
 
 // Desktop Navigation Link
-const NavLink = ({ to, icon, label }) => {
+const NavLink = ({ to, icon, label, currentPath }) => {
+  const isActive = to === "/" ? currentPath === "/" : currentPath.startsWith(to);
+  
   return (
     <Link 
       to={to} 
-      className="px-3 py-2 rounded-full hover:bg-blue-700/30 transition-colors flex items-center gap-1.5 text-sm font-medium"
+      className={`px-3 py-2 rounded-full transition-colors flex items-center gap-1.5 text-sm font-medium
+        ${isActive 
+          ? 'bg-blue-600 text-white shadow-md' 
+          : 'hover:bg-blue-700/30 text-white/90'
+        }`}
     >
       {icon}
       {label}
+      {isActive && (
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full bg-blue-300 hidden" />
+      )}
     </Link>
   );
 };
 
 // Mobile Navigation Link
-const MobileNavLink = ({ to, icon, label, onClick }) => {
+const MobileNavLink = ({ to, icon, label, onClick, currentPath }) => {
+  const isActive = to === "/" ? currentPath === "/" : currentPath.startsWith(to);
+  
   return (
     <Link 
       to={to} 
-      className="px-3 py-2.5 rounded-md hover:bg-blue-800/50 transition-colors flex items-center gap-3"
+      className={`px-3 py-2.5 rounded-md transition-colors flex items-center gap-3
+        ${isActive 
+          ? 'bg-blue-700 text-white font-medium' 
+          : 'hover:bg-blue-800/50 text-white/90'
+        }`}
       onClick={onClick}
     >
       {icon}
       <span className="font-medium">{label}</span>
+      {isActive && (
+        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-300" />
+      )}
     </Link>
   );
 };
