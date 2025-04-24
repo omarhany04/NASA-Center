@@ -9,6 +9,52 @@ const SearchResults = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search).get("q");
 
+  const fetchFromGemini = async (userQuery) => {
+    const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `Give a brief explanation about: ${userQuery}` }] }],
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error("Gemini Error:", data.error);
+        return [
+          {
+            title: "AI Assistant",
+            description: data.error?.message || "No response from Gemini.",
+          },
+        ];
+      }
+
+      const resultText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "No information found.";
+      return [
+        {
+          title: "AI Assistant",
+          description: resultText,
+        },
+      ];
+    } catch (err) {
+      console.error("Gemini API Error:", err);
+      return [
+        {
+          title: "AI Assistant",
+          description: "There was a problem connecting to the Gemini API.",
+        },
+      ];
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (!query) return;
@@ -20,59 +66,62 @@ const SearchResults = () => {
           `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`,
           `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&api_key=${apiKey}`,
           `https://api.nasa.gov/neo/rest/v1/feed?api_key=${apiKey}`,
-          `https://api.nasa.gov/EPIC/api/natural/images?api_key=${apiKey}`
+          `https://api.nasa.gov/EPIC/api/natural/images?api_key=${apiKey}`,
         ];
 
-        const responses = await Promise.allSettled(endpoints.map(url => axios.get(url)));
+        const responses = await Promise.allSettled(endpoints.map((url) => axios.get(url)));
 
         const successfulResponses = responses
-          .filter(res => res.status === "fulfilled")
-          .map(res => res.value.data);
-
-        if (successfulResponses.length === 0) {
-          throw new Error("No valid responses from NASA APIs.");
-        }
+          .filter((res) => res.status === "fulfilled")
+          .map((res) => res.value.data);
 
         const extractedResults = [];
-        successfulResponses.forEach(data => {
+        successfulResponses.forEach((data) => {
           if (data.url) {
             extractedResults.push({
               title: data.title,
               imageUrl: data.url,
-              description: data.explanation
+              description: data.explanation,
             });
           } else if (data.photos) {
-            data.photos.forEach(photo => {
+            data.photos.forEach((photo) => {
               extractedResults.push({
                 title: `Mars Rover Photo - ${photo.rover.name}`,
                 imageUrl: photo.img_src,
-                description: `Taken by ${photo.camera.full_name} on ${photo.earth_date}`
+                description: `Taken by ${photo.camera.full_name} on ${photo.earth_date}`,
               });
             });
           } else if (data.near_earth_objects) {
-            Object.values(data.near_earth_objects).flat().forEach(neo => {
-              extractedResults.push({
-                title: neo.name,
-                description: `Potentially hazardous: ${neo.is_potentially_hazardous_asteroid}`,
+            Object.values(data.near_earth_objects)
+              .flat()
+              .forEach((neo) => {
+                extractedResults.push({
+                  title: neo.name,
+                  description: `Potentially hazardous: ${neo.is_potentially_hazardous_asteroid}`,
+                });
               });
-            });
           } else if (Array.isArray(data)) {
-            data.forEach(item => {
+            data.forEach((item) => {
               const date = item.date.split(" ")[0].replaceAll("-", "/");
               extractedResults.push({
                 title: "EPIC Earth Image",
                 imageUrl: `https://epic.gsfc.nasa.gov/archive/natural/${date}/png/${item.image}.png`,
-                description: `Captured on ${item.date}`
+                description: `Captured on ${item.date}`,
               });
             });
           }
         });
 
-        const filteredResults = extractedResults.filter(item =>
+        const filteredResults = extractedResults.filter((item) =>
           JSON.stringify(item).toLowerCase().includes(query.toLowerCase())
         );
 
-        setResults(filteredResults);
+        if (filteredResults.length > 0) {
+          setResults(filteredResults);
+        } else {
+          const fallback = await fetchFromGemini(query);
+          setResults(fallback);
+        }
       } catch (err) {
         console.error("Error fetching search data:", err);
         setError("NASA API is currently unavailable. Please try again later.");
@@ -95,7 +144,13 @@ const SearchResults = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {results.map((item, index) => (
             <div key={index} className="border p-3 rounded-md shadow-lg">
-              {item.imageUrl && <img src={item.imageUrl} alt={item.title} className="w-full h-48 object-cover rounded-md" />}
+              {item.imageUrl && (
+                <img
+                  src={item.imageUrl}
+                  alt={item.title}
+                  className="w-full h-48 object-cover rounded-md"
+                />
+              )}
               <h2 className="font-bold mt-2">{item.title}</h2>
               <p className="text-sm">{item.description}</p>
             </div>
