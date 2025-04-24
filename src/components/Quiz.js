@@ -34,7 +34,7 @@ const Quiz = ({ setQuizOpen, isOpen }) => {
           if (isOpen) {
             setQuizPosition({
               position: "fixed",
-              bottom: "26rem", // Increased to account for taller chatbot
+              bottom: "26rem",
               right: "4px",
               left: "4px",
               maxHeight: "14rem"
@@ -53,7 +53,7 @@ const Quiz = ({ setQuizOpen, isOpen }) => {
           if (isOpen) {
             setQuizPosition({
               position: "fixed",
-              bottom: "28rem", // Increased to account for taller chatbot
+              bottom: "28rem",
               right: "auto",
               left: "50%",
               transform: "translateX(-50%)",
@@ -75,7 +75,7 @@ const Quiz = ({ setQuizOpen, isOpen }) => {
             setQuizPosition({
               position: "fixed",
               bottom: "4rem",
-              right: "calc(18rem + 32px)", // 32px gap (2rem) between components
+              right: "calc(18rem + 32px)", 
               maxHeight: "20rem"
             });
           } else {
@@ -87,11 +87,11 @@ const Quiz = ({ setQuizOpen, isOpen }) => {
             });
           }
         } else {
-          // For larger screens - keep original desktop positioning
+          // For larger screens 
           setQuizPosition({
             position: "fixed",
             bottom: "4rem",
-            right: isOpen ? "calc(24rem + 48px)" : "4rem", // 48px gap (3rem) between components
+            right: isOpen ? "calc(24rem + 48px)" : "4rem", 
             maxHeight: "24rem"
           });
         }
@@ -114,7 +114,7 @@ const Quiz = ({ setQuizOpen, isOpen }) => {
   const getQuizDimensions = () => {
     if (typeof window !== "undefined") {
       const width = window.innerWidth;
-      if (width < 480) return "w-11/12 mx-auto max-h-64"; // extra small screens
+      if (width < 480) return "w-11/12 mx-auto max-h-68"; // extra small screens
       if (width < 640) return "w-3/4 max-h-72"; // small screens
       return "w-72 max-h-80"; // medium and large screens
     }

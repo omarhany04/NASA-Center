@@ -175,7 +175,6 @@ const Chatbot = () => {
       const nasaResponse = await fetchNASAData(userQuery);
       
       if (nasaResponse) {
-        // Format NASA API data responses as before
         let formattedResponse;
         
         if (Array.isArray(nasaResponse.photos) && nasaResponse.photos.length > 0) {
@@ -241,12 +240,12 @@ const Chatbot = () => {
   const getChatWindowDimensions = () => {
     if (typeof window !== "undefined") {
       const width = window.innerWidth;
-      if (width < 480) return "w-11/12 mx-auto h-96"; // Increased height for extra small screens
-      if (width < 640) return "w-80 mx-auto h-[400px]"; // Increased height for small screens
-      if (width < 768) return "w-80 h-[420px]"; // Increased height for medium screens
-      return "w-96 h-[460px]"; // Increased height for large screens
+      if (width < 480) return "w-11/12 mx-auto h-96"; // extra small screens
+      if (width < 640) return "w-80 mx-auto h-[320px]";  // small screens
+      if (width < 768) return "w-80 h-[360px]"; // medium screens
+      return "w-96 h-[380px]";  // large screens
     }
-    return "w-80 h-[400px]"; // Increased default height
+    return "w-80 h-[300px]";  // default
   };
 
   return (
